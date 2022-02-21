@@ -9,8 +9,7 @@ class EstateProperty(models.Model):
     _description = 'Estate property'
     
 
-    name = fields.Char('Estate Name', required=True)
-    title = fields.Char('Title')
+    name = fields.Char('Title', required=True)
     description = fields.Text('Description')
     postcode = fields.Char()
     state = fields.Selection(
