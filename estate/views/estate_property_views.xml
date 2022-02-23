@@ -41,8 +41,11 @@
         <field name="name">estate.property.form</field>
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
-            <form string="Estate Property">
-                <sheet>
+            <form string="Properties">
+              <sheet>
+                  <group>     
+                    <field name="name"/>
+                  </group>
                   <group>
                     <group>
                       <field name="postcode"/>
@@ -55,7 +58,6 @@
                     <notebook>
                       <page string="Description">
                         <group>
-                          <field name="name"/>
                           <field name="description"/>
                           <field name="bedrooms"/>
                           <field name="living_area"/>
@@ -74,7 +76,7 @@
         </field>
     </record>
   <record id="estate_property_action" model="ir.actions.act_window">
-        <field name="name">Estate Property</field>
+        <field name="name">Properties</field>
         <field name="res_model">estate.property</field>
         <field name="view_mode">tree,form</field>
   </record>
