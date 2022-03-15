@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from email.policy import default
+import string
 from odoo import fields, models
 from dateutil.relativedelta import relativedelta
 
@@ -8,7 +9,6 @@ class EstateProperty(models.Model):
     _name = 'estate.property'
     _description = 'Estate property'
     
-
     name = fields.Char('Title', required=True)
     description = fields.Text('Description')
     postcode = fields.Char()
@@ -31,4 +31,8 @@ class EstateProperty(models.Model):
     garden_orientation = fields.Selection(
         selection=[('north', 'North'), ('south', 'South'), ('east', 'East'), ('west', 'West')]
     )
-    # property_type_id = fields.Many2one()
+    property_type_id = fields.Many2one("estate.property.type", string="Property Type")
+    salesperson = fields.Many2one('res.users', string='Salesman', index=True, tracking=True, default=lambda self: self.env.user)
+    buyer = fields.Many2one('res.partner', string='Buyer', copy=False, index=True, tracking=True, default=lambda self: self.env.user)
+    tag_ids = fields.Many2many("estate.property.tag", string="Tag")
+    offer_ids = fields.One2many("estate.property.offer", "partner_id", string="Offers")
