@@ -2,7 +2,7 @@
 
 from email.policy import default
 import string
-from odoo import fields, models
+from odoo import api, fields, models
 from dateutil.relativedelta import relativedelta
 
 class EstateProperty(models.Model):
@@ -33,6 +33,18 @@ class EstateProperty(models.Model):
     )
     property_type_id = fields.Many2one("estate.property.type", string="Property Type")
     salesperson = fields.Many2one('res.users', string='Salesman', index=True, tracking=True, default=lambda self: self.env.user)
-    buyer = fields.Many2one('res.partner', string='Buyer', copy=False, index=True, tracking=True, default=lambda self: self.env.user)
+    buyer = fields.Many2one('res.partner', string='Buyer', copy=False, index=True, tracking=True)
     tag_ids = fields.Many2many("estate.property.tag", string="Tag")
-    offer_ids = fields.One2many("estate.property.offer", "partner_id", string="Offers")
+    offer_ids = fields.One2many("estate.property.offer", "property_id", string="Offers")
+    total_area = fields.Float(compute="_compute_total")
+    best_price = fields.Float(compute="_compute_best_price")
+
+    @api.depends('living_area', 'garden_area')
+    def _compute_total(self):
+        for record in self:
+            record.total_area = record.living_area + record.garden_area
+
+    @api.depends('offer_ids.price')
+    def _compute_best_price(self):
+        for record in self:
+            record.best_price = record.offer_ids.price
